@@ -5,7 +5,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /djangocker
 
-COPY requirements.txt /djangocker/
+COPY requirements.txt ./
+
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY . /djangocker/
+
+COPY . ./
+COPY build_files.sh ./
+RUN chmod +x ./build_files.sh

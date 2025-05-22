@@ -3,9 +3,10 @@
 services:
   web:
     build: .
-    command: gunicorn djangocker.wsgi:application --bind 0.0.0.0:8000
+    command: /djangocker/build_files.sh
     volumes:
-      - ./app:/djangocker
+      - ./media:/djangocker/media
+      - ./staticfiles:/djangocker/staticfiles
     env_file:
       - .env
     depends_on:
