@@ -1,0 +1,27 @@
+
+
+services:
+  web:
+    build: .
+    command: gunicorn djangocker.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./app:/djangocker
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  pgdata:
