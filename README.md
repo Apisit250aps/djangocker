@@ -16,7 +16,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 บทความนี้จะแนะนำวิธีการ Deploy Django Application โดยใช้ Docker และ Nginx เป็น Reverse Proxy พร้อมกับ PostgreSQL Database การ Setup นี้เหมาะสำหรับ Production Environment และสามารถ Scale ได้ง่าย
 
@@ -29,7 +29,7 @@
 
 ---
 
-## 🏗️ Architecture & How It Works
+## Architecture & How It Works
 
 ### สถาปัตยกรรมระบบ
 
@@ -66,7 +66,7 @@
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### Software Requirements
 - Docker (version 20.0+)
@@ -106,7 +106,7 @@ sudo systemctl enable docker
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 djangocker/
@@ -145,7 +145,7 @@ djangocker/
 
 ---
 
-## ⚙️ Configuration Files Explained
+## Configuration Files Explained
 
 ### 1. docker-compose.yml
 
@@ -253,7 +253,7 @@ python manage.py runserver 0.0.0.0:8000
 
 ---
 
-## 🔧 Environment Setup
+## Environment Setup
 
 ### 1. สร้าง .env file
 
@@ -292,65 +292,58 @@ EMAIL_HOST_PASSWORD=your-app-password
 ### 3. สร้าง requirements.txt
 
 ```txt
-Django==5.0.1
-psycopg2-binary==2.9.9
-gunicorn==21.2.0
-python-decouple==3.8
-Pillow==10.2.0
-django-cors-headers==4.3.1
-djangorestframework==3.14.0
+asgiref==3.8.1
+Django==5.1.7
+sqlparse==0.5.3
+tzdata==2025.1
+gunicorn
+psycopg2-binary
 ```
 
 ### 4. แก้ไข Django settings.py
 
 ```python
+from pathlib import Path
 import os
-from decouple import config
 
 # Security
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+SECRET_KEY = os.environ.get("SECRET_KEY", 'secret-key')
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get("DEBUG", 'True')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('POSTGRES_DB'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),  # <<< service name
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 
 # Static Files
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [Path.joinpath(BASE_DIR, 'statics')]
+STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
 
 # Media Files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
 
-# Security Headers (Production)
-if not DEBUG:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
 ```
 
 ---
 
-## 🚀 Step-by-Step Deployment
+## Step-by-Step Deployment
 
 ### Step 1: Clone และ Setup Project
 
 ```bash
 # Clone project
-git clone <your-repository-url>
+git clone https://github.com/Apisit250aps/djangocker.git
 cd djangocker
 
 # Copy environment file
@@ -406,7 +399,7 @@ exit
 
 ---
 
-## 🧪 Testing & Verification
+## Testing & Verification
 
 ### 1. ตรวจสอบ Services Status
 
@@ -457,7 +450,7 @@ curl http://localhost/static/admin/css/base.css
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues และ Solutions
 
@@ -555,7 +548,7 @@ docker-compose exec web ping nginx
 
 ---
 
-## 🏭 Production Best Practices
+## Production Best Practices
 
 ### 1. Security
 
@@ -667,7 +660,7 @@ services:
 
 ---
 
-## 📝 Useful Commands
+## Useful Commands
 
 ### Docker Compose Commands
 
@@ -723,7 +716,7 @@ docker stats
 
 ---
 
-## 🎉 Conclusion
+## Conclusion
 
 การ Deploy Django ด้วย Docker และ Nginx ให้ประโยชน์มากมาย:
 
@@ -737,3 +730,6 @@ docker stats
 สำหรับข้อสงสัยหรือปัญหาเพิ่มเติม สามารถ refer back มายัง documentation นี้หรือตรวจสอบ logs เพื่อ debug ปัญหาได้
 
 **Happy Deploying! 🚀**
+
+---
+[Apisit250aps](https://github.com/Apisit250aps)
