@@ -17,6 +17,7 @@
 ---
 
 
+
 ## Overview
 
 บทความนี้จะแนะนำวิธีการ Deploy Django Application โดยใช้ Docker และ Nginx เป็น Reverse Proxy พร้อมกับ PostgreSQL Database การ Setup นี้เหมาะสำหรับ Production Environment และสามารถ Scale ได้ง่าย
