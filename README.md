@@ -2,7 +2,6 @@
 
 ## 📋 Table of Contents (Outline)
 
-
 1. [Overview](#overview)
 2. [Architecture & How It Works](#architecture--how-it-works)
 3. [Prerequisites](#prerequisites)
